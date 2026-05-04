@@ -3,6 +3,7 @@ using Moq;
 using NewsSite.Services.Implementations;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Azure.Storage.Blobs;
 
 namespace Tests.Services;
 
@@ -14,7 +15,8 @@ public class BlobServiceTests
         var configMock = new Mock<IConfiguration>();
         configMock.Setup(c => c["AzureWebJobsStorage"]).Returns(string.Empty);
 
-        var service = new BlobService(configMock.Object);
+        var blobServiceClient = new Mock<BlobServiceClient>();
+        var service = new BlobService(configMock.Object, blobServiceClient.Object);
         var fileMock = new Mock<IFormFile>();
 
         var result = await service.UploadImageAsync(fileMock.Object);
@@ -31,7 +33,7 @@ public class BlobServiceTests
     //    fileMock.Setup(f => f.OpenReadStream()).Returns(stream);
     //    fileMock.Setup(f => f.FileName).Returns("test.txt");
     //    var model = new NewsSite.Models.Entities.FileUpLoadModel { File = fileMock.Object };
-    //    var service = new BlobService(configMock.Object);
+    //    var service = new BlobService(configMock.Object, new Mock<BlobServiceClient>().Object);
     //    var result = await service.UploadFileToContainer(model);
     //    result.Should().NotBeNull();
     //}
@@ -42,7 +44,7 @@ public class BlobServiceTests
     //    var configMock = new Mock<IConfiguration>();
     //    configMock.Setup(c => c["AzureWebJobsStorage"]).Returns("UseDevelopmentStorage=true");
     //    configMock.Setup(c => c["BlobContainerName"]).Returns("testcontainer");
-    //    var service = new BlobService(configMock.Object);
+    //    var service = new BlobService(configMock.Object, new Mock<BlobServiceClient>().Object);
     //    var stream = new MemoryStream(new byte[] { 1, 2, 3 });
     //    var result = await service.UploadStreamToContainer(stream, "file.txt");
     //    result.Should().NotBeNull();

@@ -92,7 +92,7 @@ namespace NewsSite.Controllers
 
             try
             {
-                if (file is { Length > 0 })
+                if (file is { Length: > 0 })
                 {
                     stream = file.OpenReadStream();
                     fileName = file.FileName;

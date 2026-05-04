@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +50,18 @@ namespace NewsSite
 
             builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
             builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+
+            builder.Services.AddSingleton(x =>
+            {
+                var connectionString = builder.Configuration["StorageSettings:ConnectionString"];
+
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    throw new InvalidOperationException("Anslutningssträngen 'StorageSettings:ConnectionString' saknas i konfigurationen.");
+                }
+
+                return new BlobServiceClient(connectionString);
+            });
 
             builder.Services.AddScoped<IBlobService, BlobService>();
             builder.Services.AddHttpClient();

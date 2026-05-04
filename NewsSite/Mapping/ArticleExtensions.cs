@@ -84,7 +84,7 @@ namespace NewsSite.Mapping
             existingArticle.MetaTitle = model.MetaTitle ?? model.Title;
             existingArticle.MetaDescription = model.MetaDescription ?? model.Summary;
         }
-        public static string ResolveImageUrl(this string? imageUrl, string size = "med", IConfiguration config)
+        public static string ResolveImageUrl(this string? imageUrl, string size, IConfiguration config)
         {
             if (string.IsNullOrEmpty(imageUrl)) return "/images/placeholder.jpg";
             if (imageUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)) return imageUrl;
